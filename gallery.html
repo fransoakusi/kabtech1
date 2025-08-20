@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - KabTech Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #4A90E2;
+            --navy-dark: #2C3E50;
+            --cyan-accent: #17A2B8;
+            --light-blue: #E3F2FD;
+            --white: #FFFFFF;
+            --gray: #6C757D;
+            --gray-light: #F8F9FA;
+            --gradient-1: linear-gradient(135deg, #4A90E2 0%, #17A2B8 100%);
+            --gradient-2: linear-gradient(135deg, #2C3E50 0%, #4A90E2 100%);
+            --shadow: 0 10px 30px rgba(74, 144, 226, 0.1);
+            --shadow-hover: 0 20px 40px rgba(74, 144, 226, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--navy-dark);
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            z-index: 1001;
+            position: relative;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navy-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--navy-dark);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        /* Mobile Navigation Overlay */
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(44, 62, 80, 0.98);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .mobile-nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .mobile-nav-content {
+            text-align: center;
+            transform: translateY(50px);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .mobile-nav-overlay.active .mobile-nav-content {
+            transform: translateY(0);
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-nav-links li {
+            margin: 0.8rem 0;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-overlay.active .mobile-nav-links li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-nav-links li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-nav-links li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-nav-links li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-nav-links li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-nav-links li:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav-links li:nth-child(6) { transition-delay: 0.35s; }
+        .mobile-nav-links li:nth-child(7) { transition-delay: 0.4s; }
+
+        .mobile-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: block;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .mobile-nav-links a:hover::before,
+        .mobile-nav-links a.active::before {
+            left: 0;
+        }
+
+        .mobile-nav-links a:hover,
+        .mobile-nav-links a.active {
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mobile-nav-footer {
+            margin-top: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.5s;
+        }
+
+        .mobile-nav-overlay.active .mobile-nav-footer {
+            opacity: 1;
+        }
+
+        .mobile-contact {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .mobile-contact p {
+            margin: 0.3rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 8rem 0 4rem;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section-alt {
+            background: var(--gray-light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            color: var(--navy-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            aspect-ratio: 4/3;
+            background-color: var(--white);
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: var(--white);
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        .gallery-caption h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-caption p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .gallery-caption .meta {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .gallery-caption .meta i {
+            color: var(--cyan-accent);
+        }
+
+        /* Gallery Stats */
+        .gallery-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-item {
+            background: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .lightbox-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            opacity: 0.7;
+        }
+
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy-dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-blue);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            font-size: 1.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .gallery-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            body {
+                -webkit-overflow-scrolling: touch;
+                overflow-y: auto;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .gallery-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
+            .lightbox-content {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+            }
+
+            .mobile-nav-links a {
+                font-size: 1.1rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .gallery-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 2rem 0;
+            }
+
+            .mobile-nav-links a {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .mobile-nav-links li {
+                margin: 0.6rem 0;
+            }
+
+            .mobile-contact p {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Landscape tablet orientation */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .mobile-nav-links a {
+                font-size: 1.1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .mobile-nav-links li {
+                margin: 0.6rem 0;
+            }
+        }
+
+        /* Fix for iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">KABTECH</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-nav-overlay" id="mobileNavOverlay">
+            <div class="mobile-nav-content">
+                <ul class="mobile-nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="solutions.html">Solutions</a></li>
+                    <li><a href="team.html">Team</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="mobile-nav-footer">
+                    <div class="mobile-contact">
+                        <p>📧 kabtechconsulting@gmail.com</p>
+                        <p>📞 +233 54 252 0089</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Our Gallery</h1>
+                <p>Showcasing our projects, achievements, and memorable moments in transforming businesses through technology</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Stats -->
+    <section class="section">
+        <div class="container">
+            <div class="gallery-stats fade-in">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Projects Captured</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Team Moments</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Success Stories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Client Events</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anloga District Training Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Anloga District Training Sessions</h2>
+                <p>Comprehensive QuickBill 360 training and capacity building program for Anloga District Assembly staff</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in" onclick="openLightbox('anlo1')">
+                    <img src="assets/images/gallery/anlo1.jpg" alt="QuickBill 360 Training - Anloga District Assembly" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>QuickBill 360 Training Session</h3>
+                        <p>Training and capacity building for staff of Anloga District Assembly on QuickBill 360 system implementation and usage.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>December 2024</span>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Anloga District Assembly</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('anlo2')">
+                    <img src="assets/images/gallery/anlo2.jpg" alt="System Demonstration - Anloga District" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Interactive Training Session</h3>
+                        <p>Training and capacity building for staff of Anloga District Assembly on QuickBill 360 with hands-on demonstration.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>December 2024</span>
+                            <i class="fas fa-users"></i>
+                            <span>District Staff Training</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('anlo3')">
+                    <img src="assets/images/gallery/anlo3.jpg" alt="Capacity Building Workshop - Anloga" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Capacity Building Workshop</h3>
+                        <p>Training and capacity building for staff of Anloga District Assembly on QuickBill 360 features and best practices.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>December 2024</span>
+                            <i class="fas fa-building"></i>
+                            <span>Assembly Office</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('anlo4')">
+                    <img src="assets/images/gallery/anlo4.jpg" alt="Team Collaboration - Anloga District" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Comprehensive Training Session</h3>
+                        <p>Training and capacity building for staff of Anloga District Assembly on QuickBill 360 complete system overview.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>December 2024</span>
+                            <i class="fas fa-lightbulb"></i>
+                            <span>System Training</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- North Tongu Training Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>North Tongu Training Sessions</h2>
+                <p>Comprehensive QuickBill 360 training and capacity building program for North Tongu District Assembly staff</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in" onclick="openLightbox('northtongu1')">
+                    <img src="assets/images/gallery/northtongu1.jpeg" alt="QuickBill 360 Presentation - North Tongu" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>System Demonstration Presentation</h3>
+                        <p>Training and capacity building for staff of North Tongu on QuickBill 360 with live system demonstration and interface walkthrough.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>November 2024</span>
+                            <i class="fas fa-desktop"></i>
+                            <span>Live Demo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('northtongu2')">
+                    <img src="assets/images/gallery/northtongu2.jpeg" alt="Interactive Training - North Tongu" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Interactive Training Session</h3>
+                        <p>Training and capacity building for staff of North Tongu on QuickBill 360 with detailed feature explanation and Q&A session.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>November 2024</span>
+                            <i class="fas fa-users"></i>
+                            <span>Interactive Session</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('northtongu3')">
+                    <img src="assets/images/gallery/northtongu3.jpeg" alt="Participant Engagement - North Tongu" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Participant Engagement Workshop</h3>
+                        <p>Training and capacity building for staff of North Tongu on QuickBill 360 with active participant engagement and discussion.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>November 2024</span>
+                            <i class="fas fa-comments"></i>
+                            <span>Active Discussion</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in" onclick="openLightbox('northtongu4')">
+                    <img src="assets/images/gallery/northtongu4.jpeg" alt="Comprehensive Training - North Tongu" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Comprehensive Training Program</h3>
+                        <p>Training and capacity building for staff of North Tongu on QuickBill 360 featuring full assembly hall participation and comprehensive coverage.</p>
+                        <div class="meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>November 2024</span>
+                            <i class="fas fa-building"></i>
+                            <span>Assembly Hall</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img id="lightbox-img" src="" alt="">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>KABTECH</h3>
+                    <p>Empowering Innovation, Transforming Tomorrow</p>
+                    <div class="footer-social">
+                        <a href="mailto:kabtechconsulting@gmail.com">📧</a>
+                        <a href="tel:+233542520089">📞</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="solutions.html">Solutions</a></li>
+                        <li><a href="team.html">Our Team</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services.html">Custom Development</a></li>
+                        <li><a href="services.html">IT Consulting</a></li>
+                        <li><a href="services.html">Database Design</a></li>
+                        <li><a href="services.html">Cloud Infrastructure</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📧 kabtechconsulting@gmail.com</p>
+                    <p>📞 +233 54 252 0089</p>
+                    <p>📞 +233 54 504 1428</p>
+                    <p>🌍 Africa & Beyond</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 KabTech Consulting. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality (from index.html)
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const body = document.body;
+        let scrollPosition = 0;
+
+        function openMobileMenu() {
+            // Store current scroll position
+            scrollPosition = window.pageYOffset;
+            
+            // Add active classes
+            mobileMenu.classList.add('active');
+            mobileNavOverlay.classList.add('active');
+            
+            // Prevent background scrolling only when menu is open
+            body.style.overflow = 'hidden';
+            body.style.position = 'fixed';
+            body.style.top = `-${scrollPosition}px`;
+            body.style.width = '100%';
+        }
+
+        function closeMobileMenu() {
+            // Remove active classes
+            mobileMenu.classList.remove('active');
+            mobileNavOverlay.classList.remove('active');
+            
+            // Restore scrolling
+            body.style.overflow = '';
+            body.style.position = '';
+            body.style.top = '';
+            body.style.width = '';
+            
+            // Restore scroll position
+            window.scrollTo(0, scrollPosition);
+        }
+
+        function toggleMobileMenu() {
+            if (mobileNavOverlay.classList.contains('active')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+
+        mobileMenu.addEventListener('click', toggleMobileMenu);
+
+        // Close mobile menu when clicking on overlay
+        mobileNavOverlay.addEventListener('click', (e) => {
+            if (e.target === mobileNavOverlay) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNavOverlay.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Responsive resize handler
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && mobileNavOverlay.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Lightbox functionality
+        function openLightbox(imageId) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            
+            // You can map imageIds to actual image paths when images are added
+            const imagePaths = {
+                'anlo1': 'assets/images/gallery/anlo1.jpg',
+                'anlo2': 'assets/images/gallery/anlo2.jpg',
+                'anlo3': 'assets/images/gallery/anlo3.jpg',
+                'anlo4': 'assets/images/gallery/anlo4.jpg',
+                'northtongu1': 'assets/images/gallery/northtongu1.jpeg',
+                'northtongu2': 'assets/images/gallery/northtongu2.jpeg',
+                'northtongu3': 'assets/images/gallery/northtongu3.jpeg',
+                'northtongu4': 'assets/images/gallery/northtongu4.jpeg'
+            };
+            
+            const imageCaptions = {
+                'anlo1': 'QuickBill 360 Training Session - Training and capacity building for staff of Anloga District Assembly',
+                'anlo2': 'Interactive Training Session - Training and capacity building for staff of Anloga District Assembly with hands-on demonstration',
+                'anlo3': 'Capacity Building Workshop - Training and capacity building for staff of Anloga District Assembly on QuickBill 360 features',
+                'anlo4': 'Comprehensive Training Session - Training and capacity building for staff of Anloga District Assembly on complete system overview',
+                'northtongu1': 'System Demonstration Presentation - Training and capacity building for staff of North Tongu on QuickBill 360',
+                'northtongu2': 'Interactive Training Session - Training and capacity building for staff of North Tongu with detailed feature explanation',
+                'northtongu3': 'Participant Engagement Workshop - Training and capacity building for staff of North Tongu with active discussion',
+                'northtongu4': 'Comprehensive Training Program - Training and capacity building for staff of North Tongu in assembly hall'
+            };
+            
+            lightboxImg.src = imagePaths[imageId] || 'assets/images/placeholder.jpg';
+            lightboxCaption.textContent = imageCaptions[imageId] || 'KabTech Gallery Image';
+            lightbox.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Prevent lightbox from closing when clicking on the image
+        document.querySelector('.lightbox-content').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        // Ensure smooth scrolling on mobile
+        document.documentElement.style.scrollBehavior = 'smooth';
+        
+        // Touch scroll optimization for iOS
+        document.addEventListener('touchmove', function(e) {
+            if (!mobileNavOverlay.classList.contains('active')) {
+                // Allow normal scrolling when menu is closed
+                return true;
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>
